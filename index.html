@@ -51,7 +51,7 @@
         <div class="countdown-container p-4">
           <img src="https://oldschool.runescape.wiki/images/Old_School_RuneScape_logo.png" alt="OSRS Logo" class="osrs-logo">
           
-          <h1 class="display-5 mb-4">Countdown to Leagues V</h1>
+          <h1 class="display-5 mb-4">Countdown for Leagues V</h1>
           <div id="timer" class="mb-3"></div>
           <p>Prepare for the next challenge in Gielinor!</p>
         </div>
@@ -62,36 +62,40 @@
   <script>
     $(function () {
       const targetDate = new Date("2024-11-27T12:00:00+00:00").getTime();
+      const leaguesDuration = 8 * 7 * 24 * 60 * 60 * 1000;
+      const leaguesEndDate = targetDate + leaguesDuration;
 
       const second = 1000;
       const minute = second * 60;
       const hour = minute * 60;
       const day = hour * 24;
 
-      const now = new Date().getTime();
-      if (now > targetDate) {
-        $('#timer').html("The countdown has ended!");
-        return;
-      }
+      function updateTimer() {
+        const now = new Date().getTime();
 
-      function updateCountdown() {
-        const timeLeft = targetDate - new Date().getTime();
-
-        if (timeLeft > 0) {
+        if (now < targetDate) {
+          const timeLeft = targetDate - now;
           const days = Math.floor(timeLeft / day);
           const hours = Math.floor((timeLeft % day) / hour);
           const minutes = Math.floor((timeLeft % hour) / minute);
           const seconds = Math.floor((timeLeft % minute) / second);
 
-          $('#timer').html(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+          $('#timer').html(`Starts in: ${days}d ${hours}h ${minutes}m ${seconds}s`);
+        } else if (now < leaguesEndDate) {
+          const timeLeft = leaguesEndDate - now;
+          const days = Math.floor(timeLeft / day);
+          const hours = Math.floor((timeLeft % day) / hour);
+          const minutes = Math.floor((timeLeft % hour) / minute);
+          const seconds = Math.floor((timeLeft % minute) / second);
+
+          $('#timer').html(`Ends in: ${days}d ${hours}h ${minutes}m ${seconds}s`);
         } else {
-          clearInterval(interval);
-          $('#timer').html("The countdown has ended!");
+          $('#timer').html("The Leagues have ended!");
         }
       }
 
-      updateCountdown();
-      const interval = setInterval(updateCountdown, 1000);
+      updateTimer();
+      const interval = setInterval(updateTimer, 1000);
     });
   </script>
   
